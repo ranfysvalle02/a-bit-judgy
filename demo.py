@@ -2,55 +2,7 @@ import ray
 from typing import Any, Callable, Dict
 import ollama
 def sample_function(question=""):
-        response = ollama.chat(model='llama3.2:3b', messages=[
-        {
-            'role': 'user',
-            'content': f'[call]\n{sample_call}\n[/call]\n\n\n{question} [max 5 word]',
-        },
-        ])
-        print(response['message']['content'])
-        ai_msg = response['message']['content']
-        return ai_msg
-def run_function_in_parallel(func: Callable, N: int, question: str) -> Dict[int, Any]:
-    """
-    Executes the given function `func` N times in parallel using Ray and returns a dictionary
-    mapping each run index to its result.
-
-    Parameters:
-    - func: The function to execute. It should be serializable by Ray.
-    - N: The number of times to run the function in parallel.
-    - *args: Positional arguments to pass to `func`.
-    - **kwargs: Keyword arguments to pass to `func`.
-
-    Returns:
-    - A dictionary where keys are run indices (0 to N-1) and values are the results of each run.
-    """
-
-    # Initialize Ray if it hasn't been initialized yet
-    if not ray.is_initialized():
-        ray.init(ignore_reinit_error=True)
-
-    # Define a remote version of the input function
-    @ray.remote
-    def remote_func():
-        return func(question)
-
-    # Launch N parallel tasks
-    futures = [remote_func.remote() for _ in range(N)]
-
-    # Wait for all tasks to complete and gather results
-    results = ray.get(futures)
-
-    # Create a dictionary mapping run indices to results
-    result_dict = {i: result for i, result in enumerate(results)}
-
-    return result_dict
-
-# Example Usage
-if __name__ == "__main__":
-    # Number of parallel runs
-    N = 5
-    sample_call = """
+        sample_call = """
 **Call Transcript**
 
 **Date:** November 20, 2024
@@ -105,6 +57,55 @@ if __name__ == "__main__":
 **End of Call**
 ======================
 """
+        response = ollama.chat(model='llama3.2:3b', messages=[
+        {
+            'role': 'user',
+            'content': f'[call]\n{sample_call}\n[/call]\n\n\n{question} [max 5 word]',
+        },
+        ])
+        print(response['message']['content'])
+        ai_msg = response['message']['content']
+        return ai_msg
+def run_function_in_parallel(func: Callable, N: int, question: str) -> Dict[int, Any]:
+    """
+    Executes the given function `func` N times in parallel using Ray and returns a dictionary
+    mapping each run index to its result.
+
+    Parameters:
+    - func: The function to execute. It should be serializable by Ray.
+    - N: The number of times to run the function in parallel.
+    - *args: Positional arguments to pass to `func`.
+    - **kwargs: Keyword arguments to pass to `func`.
+
+    Returns:
+    - A dictionary where keys are run indices (0 to N-1) and values are the results of each run.
+    """
+
+    # Initialize Ray if it hasn't been initialized yet
+    if not ray.is_initialized():
+        ray.init(ignore_reinit_error=True)
+
+    # Define a remote version of the input function
+    @ray.remote
+    def remote_func():
+        return func(question)
+
+    # Launch N parallel tasks
+    futures = [remote_func.remote() for _ in range(N)]
+
+    # Wait for all tasks to complete and gather results
+    results = ray.get(futures)
+
+    # Create a dictionary mapping run indices to results
+    result_dict = {i: result for i, result in enumerate(results)}
+
+    return result_dict
+
+# Example Usage
+if __name__ == "__main__":
+    # Number of parallel runs
+    N = 5
+    
     # Run the function in parallel
     results = run_function_in_parallel(sample_function, N, question="Is this a good conversation?")
 
