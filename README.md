@@ -209,6 +209,185 @@ Consultative Selling
 
 ---
 
+
+---
+
+## Defining the `sample_function`
+
+```python
+def sample_function(question="", max_word=5):
+    sample_call = """
+    **Call Transcript**
+    ...
+    **End of Call**
+    ======================
+    """
+    response = ollama.chat(model='llama3.2:3b', messages=[
+        {
+            'role': 'system',
+            'content': f'You are a helpful AI assistant who analyzes call transcripts. [important! response must always be max {max_word} words]'
+        },
+        {
+            'role': 'user',
+            'content': f'[call]\n{sample_call}\n[/call]\n\n\n{question} [important! max {max_word} words]',
+        },
+    ])
+    print(response['message']['content'])
+    ai_msg = response['message']['content']
+    return ai_msg
+```
+
+### Breakdown
+
+- **Function Purpose**: Analyzes a sales call transcript using an LLM to answer a specific question.
+- **Parameters**:
+  - `question`: The question to ask the LLM.
+  - `max_word`: The maximum number of words allowed in the LLM's response.
+
+### Steps Inside the Function
+
+1. **Defining the Transcript**: A multi-line string `sample_call` contains the transcript of a sales call between Jane Doe (sales rep) and John Smith (prospective client).
+
+2. **Preparing the LLM Request**:
+   - The `ollama.chat()` function is called with the following parameters:
+     - `model`: Specifies the LLM model to use (`'llama3.2:3b'`).
+     - `messages`: A list of messages simulating a conversation with the LLM.
+       - **System Message**: Sets the context, instructing the LLM to act as a helpful AI assistant analyzing call transcripts. It emphasizes that the response must be within the `max_word` limit.
+       - **User Message**: Contains the call transcript and the question to be answered, again emphasizing the word limit.
+
+3. **Processing the Response**:
+   - Prints the LLM's response to the console.
+   - Extracts the response content and returns it.
+
+---
+
+## Running the Function in Parallel with `run_function_in_parallel`
+
+```python
+def run_function_in_parallel(func: Callable, N: int, question: str, max_word: int) -> Dict[int, Any]:
+    # Initialize Ray if it hasn't been initialized yet
+    if not ray.is_initialized():
+        ray.init(ignore_reinit_error=True)
+
+    # Define a remote version of the input function
+    @ray.remote
+    def remote_func():
+        return func(question, max_word)
+
+    # Launch N parallel tasks
+    futures = [remote_func.remote() for _ in range(N)]
+
+    # Wait for all tasks to complete and gather results
+    results = ray.get(futures)
+
+    # Create a dictionary mapping run indices to results
+    result_dict = {i: result for i, result in enumerate(results)}
+
+    return result_dict
+```
+
+### Breakdown
+
+- **Function Purpose**: Executes a given function `N` times in parallel using Ray and collects the results.
+- **Parameters**:
+  - `func`: The function to execute (in this case, `sample_function`).
+  - `N`: The number of times to run the function in parallel.
+  - `question`: The question to pass to the function.
+  - `max_word`: The maximum word limit for the LLM's response.
+
+### Steps Inside the Function
+
+1. **Initializing Ray**: Checks if Ray is initialized; if not, initializes it with `ray.init()`.
+
+2. **Defining the Remote Function**:
+   - Uses the `@ray.remote` decorator to define `remote_func()`, which calls `func(question, max_word)`.
+
+3. **Launching Parallel Tasks**:
+   - Creates a list of futures by calling `remote_func.remote()` `N` times.
+   - Each call to `remote_func.remote()` schedules the function for execution in parallel.
+
+4. **Collecting Results**:
+   - Uses `ray.get(futures)` to retrieve the results once all tasks are complete.
+   - Maps each result to its run index in a dictionary.
+
+5. **Returning Results**: Provides a dictionary where keys are run indices, and values are the corresponding results.
+
+---
+
+## Main Execution Block
+
+```python
+if __name__ == "__main__":
+    # Number of parallel runs
+    N = 5
+
+    # Run the function in parallel
+    results = run_function_in_parallel(sample_function, N, question="What is the `sales motion`?", max_word=5)
+
+    # Print the results
+    for run_id, result in results.items():
+        print(f"Run {run_id}: Result = {result}")
+    # Shutdown Ray (optional)
+    ray.shutdown()
+```
+
+### Steps
+
+1. **Setting the Number of Runs**: `N = 5` specifies that the function will run five times in parallel.
+
+2. **Running the Analysis**:
+   - Calls `run_function_in_parallel()` with the `sample_function`, passing the question and word limit.
+
+3. **Displaying the Results**:
+   - Iterates over the results dictionary and prints each run's output.
+
+4. **Shutting Down Ray**: Calls `ray.shutdown()` to clean up resources.
+
+---
+
+## Observing the Outputs
+
+### Sample Outputs
+
+```
+# TEST 1
+Run 0: Result = Solution sales with demos.
+Run 1: Result = SaaS platform as solution seller.
+Run 2: Result = Problem-Agitate-Solve (PAS) sales motion.
+Run 3: Result = Addressing challenges, showcasing benefits.
+Run 4: Result = Solution showcase and demo.
+```
+
+### Analysis
+
+- **Variability**: Each run produces a different result, even though the input transcript and question are the same.
+- **Inconsistency**: The LLM identifies different sales motions or provides varied descriptions.
+
+---
+
+## Understanding the Variability
+
+### Why Do the Outputs Vary?
+
+1. **Randomness in LLMs**:
+   - LLMs often include a degree of randomness (controlled by parameters like temperature) to generate diverse and creative responses.
+   - Even with the same input, the model may produce different outputs due to this randomness.
+
+2. **Ambiguity in the Question**:
+   - The question "What is the `sales motion`?" is open-ended.
+   - Without specific guidance, the LLM may interpret the question differently each time.
+
+3. **Biases in Training Data**:
+   - The LLM's training data may influence it to favor certain sales methodologies.
+   - Lack of exposure to specific sales motions can lead to inconsistent identification.
+
+### Impact of Variability
+
+- **Unreliable Analysis**: Inconsistent outputs make it challenging to rely on the LLM for accurate sales motion analysis.
+- **Decision-Making Challenges**: Businesses may struggle to make informed decisions based on inconsistent insights.
+
+---
+
 ## Conclusion
 
 LLMs hold significant potential for enhancing sales motion analysis by automating the interpretation of sales interactions. However, inherent biases and technical limitations can lead to inconsistent and inaccurate outputs. By understanding these challenges and implementing targeted strategies—such as fine-tuning models, crafting precise prompts, adjusting parameters, and involving human expertise—we can mitigate biases and unlock the full value of LLMs in sales analytics.
