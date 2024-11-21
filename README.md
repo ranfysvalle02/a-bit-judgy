@@ -383,54 +383,6 @@ if __name__ == "__main__":
     ray.shutdown()
 ```
 
-### Observing the Outputs
-
-#### Sample Outputs
-
-```
-Run 0: Result = Consultative Selling
-Run 1: Result = Consultative Selling
-Run 2: Result = Consultative Selling
-Run 3: Result = Consultative Selling
-Run 4: Result = Consultative Selling
-```
-
-### Analysis
-
-- **Consistency Achieved**: All runs produce the same result, demonstrating that the LLM provides consistent outputs when properly guided.
-
-- **Alignment with Strategy**: The identified sales motion matches the company's consultative selling approach, reflecting the dependency on the sales process.
-
----
-
-## Understanding the Improvement
-
-### Why Do the Outputs Now Consistently Reflect the Company's Sales Motion?
-
-1. **Inclusion of Company Context**:
-
-   - By specifying the company's focus on consultative selling, the LLM is better equipped to interpret the transcript accordingly.
-
-2. **Clear and Specific Prompts**:
-
-   - Providing specific options and asking the LLM to choose among them reduces ambiguity.
-
-3. **Controlled Randomness**:
-
-   - Setting the temperature to zero eliminates variability due to randomness.
-
-4. **Emphasizing Dependencies**:
-
-   - Acknowledging that the sales motion depends on the sales process, which in turn depends on the company strategy, helps the LLM make more accurate assessments.
-
-### Impact of Addressing Biases
-
-- **Enhanced Reliability**: The LLM's analysis becomes a dependable tool for evaluating sales calls.
-
-- **Better Decision-Making**: Consistent and accurate insights support more informed business decisions.
-
----
-
 ## Conclusion
 
 LLMs hold significant potential for enhancing sales motion analysis by automating the interpretation of sales interactions. However, inherent biases and technical limitations can lead to inconsistent and inaccurate outputs. By understanding these challenges and implementing targeted strategies—such as fine-tuning models, crafting precise prompts with company context, adjusting parameters, and involving human expertise—we can mitigate biases and unlock the full value of LLMs in sales analytics.
