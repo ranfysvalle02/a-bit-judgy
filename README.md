@@ -82,7 +82,7 @@ LLMs enable automated categorization of calls based on predefined criteria, such
 
 LLMs can detect and redact sensitive information from transcripts, such as:
 
-- **Personal Identifiable Information (PII)**: Names, addresses, credit card numbers.
+- **Personal Identifiable Information (PII)**: Names, addresses, passwords, credit card numbers.
 - **Confidential Data**: Proprietary business information.
 
 *Importance:*
