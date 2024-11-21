@@ -2,7 +2,7 @@
 
 ![LLM-as-a-Judge](https://www.deepchecks.com/wp-content/uploads/2024/08/post-what-is-llm-as-judge.jpg)
 
-In today's competitive business landscape, leveraging technology to enhance sales strategies is more critical than ever. Large Language Models (LLMs) like GPT-4 have emerged as powerful tools for analyzing sales call transcripts, offering insights that can refine sales motions and improve overall performance. However, biases inherent in LLMs can significantly impact the accuracy and consistency of these analyses.
+In today's competitive business landscape, leveraging technology to enhance sales strategies is more critical than ever. Large Language Models (LLMs) like GPT-4 have emerged as powerful tools for analyzing sales call transcripts, offering "insights". However, biases in LLMs can significantly impact the accuracy and consistency of these analyses.
 
 This post explores how LLM biases affect sales motion analysis, delving into the technical challenges and providing practical examples. We'll discuss why LLMs may produce inconsistent results when interpreting sales motions and offer strategies to mitigate these biases, maximizing the potential of AI in sales analytics.
 
@@ -21,10 +21,6 @@ Before diving into the technical intricacies, it's essential to distinguish and 
 - **Sales Motion Depends on Sales Process**: The effectiveness of a sales motion is closely tied to the sales process that implements it. For example, a consultative sales motion requires a sales process that includes steps for in-depth customer needs analysis and solution tailoring.
 
 - **Sales Process Depends on Company Strategy**: The design of the sales process is influenced by the company's overall strategy, including its target market, product offerings, competitive positioning, and growth objectives. A company focusing on rapid market penetration might adopt a transactional sales process, emphasizing speed and volume.
-
-### **Implications for LLM Analysis**
-
-Understanding this dependency is crucial when using LLMs for sales call analysis. LLMs must not only identify the sales motion but also consider how it aligns with the company's specific sales process and strategic objectives. Without this contextual understanding, the LLM's analysis may miss critical nuances or misinterpret the sales strategy employed.
 
 ---
 
@@ -178,7 +174,7 @@ Please provide your answer using one of the above terms.
 
 **Technical Note**: In models like GPT, `temperature=0` makes the model choose the highest probability token at each step, enhancing consistency.
 
-### **4. Incorporating Company Strategy into Prompts**
+### **4. In-Context Learning: Incorporating Company Strategy into Prompts**
 
 **Action**: Include information about your company's sales process and strategic goals in the prompt.
 
@@ -210,16 +206,12 @@ Our company focuses on a consultative selling approach, emphasizing deep underst
 
 ## Demonstrating the Solution
 
-By applying the strategies above, let's revisit the experiment with improved parameters.
-
 ### **Updated Prompt and Parameters**
 
 - **Prompt**:
 
   ```plaintext
   Based on the transcript and considering our company's focus on a consultative selling approach, identify the sales motion used, choosing from: Solution Selling, Consultative Selling, Transactional Selling, or SPIN Selling.
-
-  Please explain your reasoning in no more than 50 words.
   ```
 
 - **Temperature**: Set to 0 for deterministic output.
@@ -230,8 +222,6 @@ The LLM now consistently identifies the sales motion as:
 
 ```plaintext
 Consultative Selling
-
-Explanation: The sales representative identifies customer challenges, presents tailored solutions, and offers a personalized demo, aligning with consultative selling.
 ```
 
 ### **Analysis**
@@ -239,8 +229,6 @@ Explanation: The sales representative identifies customer challenges, presents t
 - **Alignment with Content**: The sales representative engages in understanding the client's challenges and offers tailored solutions, characteristic of consultative selling, which aligns with the company's strategy.
 
 - **Reduced Variability**: By constraining the response options, providing company-specific context, and eliminating randomness, the LLM provides consistent and accurate analyses.
-
-- **Enhanced Understanding**: Including the dependency between sales motion and sales process in the prompt helps the LLM make more informed assessments.
 
 ---
 
