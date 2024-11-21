@@ -1,4 +1,4 @@
-# LLM-as-a-Judge: How LLM Biases Affect Sales Motion Analysis
+# LLM-as-a-Judge: How LLM Biases Affect Call Transcript Analysis
 
 ![](https://www.deepchecks.com/wp-content/uploads/2024/08/post-what-is-llm-as-judge.jpg)
 
