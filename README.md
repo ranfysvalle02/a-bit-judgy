@@ -158,7 +158,7 @@ Despite using the same transcript, the LLM provides different answers across mul
 1. **Randomness in Generation**
 
    - **Temperature Settings**: LLMs use a parameter called *temperature* to control randomness. A higher temperature results in more varied outputs, while a lower temperature makes the model more deterministic.
-   - **Impact**: If the temperature isn't fixed, the model may produce different responses even with the same input.
+   - **Impact**: LLM temperature has a direct impact on response variability.
 
 2. **Ambiguity in Prompts**
 
