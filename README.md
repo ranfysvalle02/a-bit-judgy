@@ -300,10 +300,7 @@ Run 4: Result = Consultative Selling
 def sample_function(question="", max_word=5):
     sample_call = """
     **Call Transcript**
-    [Sales Rep]: Hi John, I understand that your team is facing challenges with productivity tracking. Can you tell me more about that?
-    [Client]: Yes, we're struggling to get real-time insights into our project progress.
-    [Sales Rep]: I see. Our SaaS solution offers real-time analytics and can integrate with your existing tools. Would you be interested in a personalized demo?
-    [Client]: That sounds promising. I'd like to see how it works.
+    .........
     **End of Call**
     ======================
     """
