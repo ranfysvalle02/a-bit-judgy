@@ -279,7 +279,11 @@ Our company focuses on a consultative selling approach, emphasizing deep underst
 The LLM now consistently identifies the sales motion as:
 
 ```plaintext
-Consultative Selling
+Run 0: Result = Consultative Selling
+Run 1: Result = Consultative Selling
+Run 2: Result = Consultative Selling
+Run 3: Result = Consultative Selling
+Run 4: Result = Consultative Selling
 ```
 
 ### **Analysis**
