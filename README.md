@@ -1,4 +1,4 @@
-# LLM-as-a-Judge: How LLM Biases Affect Call Transcript Analysis
+# LLM-as-a-Judge: Call Transcript Analysis + Bias
 
 ![LLM-as-a-Judge](https://www.deepchecks.com/wp-content/uploads/2024/08/post-what-is-llm-as-judge.jpg)
 
